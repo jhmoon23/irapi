@@ -61,4 +61,21 @@
         where 1=1
         and noticeseq = ${seq};
     </update>
+
+    <update id="updateFilePath" parameterType="map">
+        update NOTICE
+        set FilePath = '${filepath}',
+            fileupload ='${fileUpload}'
+        where 1=1
+        and noticeSeq = ${seq};
+    </update>
+
+
+    <update id="reviseFileUpload" parameterType="map">
+        update NOTICE
+        set
+        fileupload1 ='${fileUpload}'
+        where 1=1
+        and noticeSeq = ${seq};
+    </update>
 </mapper>
