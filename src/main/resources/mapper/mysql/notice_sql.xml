@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.tilon.irapi.dao.NoticeDao">
+    <select id="getNoticeList" parameterType="map" resultType="map">
+        select
+        noticeSeq,
+        noticeSubject,
+        noticeContents,
+        userid,
+        DATE_FORMAT(NoticeRegDay, '%Y-%m-%d'),
+        filepath,
+        fileupload
+        from NOTICE
+        where 1=1
+        <if test='searchTitle != null and !searchTitle.equals("")'>AND noticeSubject like '%${searchTitle}%'</if>
+        ORDER BY noticeSeq desc
+        LIMIT ${rowNum}, ${limitCount};
+    </select>
+
+    <select id="getSingleNotice" resultType="map" parameterType="map">
+        select
+            noticeSeq,
+            noticeSubject,
+            noticeContents,
+            userid,
+            DATE_FORMAT(NoticeRegDay, '%Y-%m-%d'),
+            filepath,
+            fileupload
+        from NOTICE
+        where 1 = 1
+          AND NoticeSeq = ${seq};
+    </select>
+
+    <insert id="putUpNotice" parameterType="map">
+        INSERT INTO NOTICE(noticeSubject, noticeContents, noticeRegDay, UserID)
+        VALUES ('${noticeSubject}',
+                '${noticeContents}',
+                NOW(),
+                '${userid}')
+    </insert>
+
+    <select id="selectSeqById" parameterType="String" resultType="int">
+        select max(noticeseq)
+        from NOTICE
+        where 1 = 1
+          and userid = '${userid}';
+    </select>
+
+    <select id="getTotalRowCount" resultType="int">
+        SELECT count(*)
+        from NOTICE
+        where 1 = 1
+    </select>
+
+    <update id="reviseNotice" parameterType="map">
+        update NOTICE
+        set
+        noticeSubject = '${noticeSubject}',
+        noticeContents ='${noticeContents}',
+        noticeRegDay = NOW()
+        where 1=1
+        and noticeseq = ${seq};
+    </update>
+</mapper>
